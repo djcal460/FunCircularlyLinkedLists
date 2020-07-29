@@ -8,4 +8,4 @@ DEPS = func.h
 funfuncircularlinkedlists: funfuncircularlinkedlists.o menufunc.o func.o
 	$(CC) -o funfuncircularlinkedlists funfuncircularlinkedlists.o menufunc.o func.o
 clean:
-	$(RM) funfuncircularlinkedlists.o
+	$(RM) funfuncircularlinkedlists.o menufunc.o func.o funfuncircularlinkedlists
