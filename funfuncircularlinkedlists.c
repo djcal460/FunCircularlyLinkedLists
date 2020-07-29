@@ -17,14 +17,13 @@ int main()
     int input, ret;
     printf("\nWelcome to Fun Circular Linked Lists. Demonstrating Knowledge of Linked Lists.\n");
     printf("To start, let's create a circular linked list.\n");
-    
+
     //create a global list called head
     makelist();
 
     //display the lists to the user
     printf("This is your circular linked list: ");
     display(head);
-
 
     //prompt user for what they would like to do with the linked list
     do
@@ -74,6 +73,3 @@ int main()
     } while (input != 6);
     exit(0);
 }
-
-    
-

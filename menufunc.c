@@ -7,10 +7,11 @@
 #include <limits.h>
 #include "func.h"
 
-extern struct Node* head;
+extern struct Node *head;
 
-void displayMenu(struct Node *p){
-//display LL using iter, tail recursion, and head recursion
+void displayMenu(struct Node *p)
+{
+    //display LL using iter, tail recursion, and head recursion
     int input, ret;
     int f = 0;
     while (!f)
@@ -107,8 +108,6 @@ struct Node *insertPosMenu(struct Node *p)
     return p;
 }
 
-
-
 void deleteHeadMenu(struct Node *p)
 {
     //delete head of list
@@ -155,5 +154,4 @@ void deleteAtPosMenu(struct Node *p)
         display(p);
         f = tryagain();
     }
-
 }

@@ -10,39 +10,41 @@
 struct Node *head = NULL;
 int flag = 1;
 
-
-void createCircular(int a[], int n){
+void createCircular(int a[], int n)
+{
     int i;
-    
+
     //t is temp helper to create new node
     struct Node *t, *last;
-    
+
     //header ptr pts to newly created node in heap
     head = (struct Node *)malloc(sizeof(struct Node));
     head->data = a[0]; //head accesses and assigns value to node
-    
+
     last = head; //both ptrs pt to new node
-    
+
     //build list by moving last ptr to new node through each iter
-    for(i = 1; i < n; i++){
-        
+    for (i = 1; i < n; i++)
+    {
+
         //create new node for the list, temp ptr pts to it
         t = (struct Node *)malloc(sizeof(struct Node));
         t->data = a[i]; //t accesses and assigns value to node
         t->next = head; //t->next always inserted last, so t->next will link to the head
-        last->next= t;  //prev ptr next addr is assigned to new node's addr
-        last = t; //last pts to this newly appended node
-        
+        last->next = t; //prev ptr next addr is assigned to new node's addr
+        last = t;       //last pts to this newly appended node
     }
-    
-}//end create
 
-void display(struct Node *p){
-    do{
-        printf("%d ",p->data);
+} //end create
+
+void display(struct Node *p)
+{
+    do
+    {
+        printf("%d ", p->data);
         p = p->next;
-    }while(p != head);
-    
+    } while (p != head);
+
     printf("\n");
 }
 
@@ -50,160 +52,176 @@ int count(struct Node *p)
 {
     int c = 0;
     //if not null start counting
-    if(p){
-        do{
+    if (p)
+    {
+        do
+        {
             c = c + 1;
-            p = p->next; 
-            
-        }while (p!=head);
+            p = p->next;
+
+        } while (p != head);
     }
     return c;
 }
 
-void recursiveTailDisplay(struct Node *p){
-    
+void recursiveTailDisplay(struct Node *p)
+{
+
     static int flag = 0;
-    
-    if(head != p || flag == 0){
+
+    if (head != p || flag == 0)
+    {
         flag = 1;
-        printf("%d ",p->data); //tail recursion 
+        printf("%d ", p->data); //tail recursion
         recursiveTailDisplay(p->next);
     }
-    
-    if(p==head && flag == 1)
+
+    if (p == head && flag == 1)
         printf("\n");
     flag = 0;
-    
 }
 
-void recursiveHeadDisplay(struct Node **h){
-    
+void recursiveHeadDisplay(struct Node **h)
+{
+
     static int flag = 0;
-    
-    if(head != *h || flag == 0){
+
+    if (head != *h || flag == 0)
+    {
         flag = 1;
-        recursiveHeadDisplay(&(*h)->next);//head recursion
-        printf("%d ",(*h)->data);  
-        
+        recursiveHeadDisplay(&(*h)->next); //head recursion
+        printf("%d ", (*h)->data);
     }
-    if(*h == head && flag == 0)
+    if (*h == head && flag == 0)
         printf("\n");
     flag = 0;
-   
 }
 
-struct Node * insertAtHead(struct Node *h,int x){
+struct Node *insertAtHead(struct Node *h, int x)
+{
     //copy head node
     struct Node *p = h;
-    
+
     //create new node, link its next to head
     struct Node *t = (struct Node *)malloc(sizeof(struct Node));
     t->data = x;
     t->next = head;
-    
+
     //iterate to last node (last node should link to head, but we want to change that)
-    while(p->next != h){
+    while (p->next != h)
+    {
         p = p->next;
     }
     p->next = t; //last node now links to t which is the new head
-    
+
     //optional
     head = t;
     return head;
-
-    
 }
 
 int insertAtPosition(struct Node **h, int x, int pos)
 {
     struct Node *p = *h;
-    if(pos > count(p)){ //check if inbounds
+    if (pos > count(p))
+    { //check if inbounds
         return 0;
     }
-    
+
     struct Node *t;
-    
+
     //if insert at pos 0, then first node (special case)
-    if(pos==0){
-        
+    if (pos == 0)
+    {
+
         //create new node
         t = (struct Node *)malloc(sizeof(struct Node));
         t->data = x;
-        
+
         //if head is null, then list was empty
-        if(head==NULL){
-            head = t; //t is head
+        if (head == NULL)
+        {
+            head = t;          //t is head
             head->next = head; //head pts to itself for circular
         }
-        else{ //list wasn't empty so need to iter to the end
-            p = head; 
-            while(p->next != head) //continue until we loop around to beginning
+        else
+        { //list wasn't empty so need to iter to the end
+            p = head;
+            while (p->next != head) //continue until we loop around to beginning
                 p = p->next;
-            p->next = t; //last node next point to new node
+            p->next = t;    //last node next point to new node
             t->next = head; //new node next pts to old head
-            head = t; //head pts to new node
+            head = t;       //head pts to new node
         }
     }
-    else{ //insert at a different pos than 0
+    else
+    { //insert at a different pos than 0
         p = head;
         //p from head to desired pos
-        for(int i = 0; i < pos-1; i++)
-            p = p->next; 
+        for (int i = 0; i < pos - 1; i++)
+            p = p->next;
         //create new node
         t = (struct Node *)malloc(sizeof(struct Node));
         t->data = x;
         t->next = p->next; //new node next pt to node after p
-        p->next = t; //node after p is now new node
+        p->next = t;       //node after p is now new node
     }
     return 1;
 }
 
-struct Node * deleteHead(struct Node *p){
+struct Node *deleteHead(struct Node *p)
+{
     //move node to end of circle
-    while(p->next != head)
+    while (p->next != head)
         p = p->next;
     p->next = head->next; //end node pts to node after head
-    free(head); //del head
-    head = p->next; //head jumps one node forward
+    free(head);           //del head
+    head = p->next;       //head jumps one node forward
     return head;
 }
 
-struct Node * deleteAtPos(struct Node *p, int pos){
-    
-    if(pos > count(p)){
+struct Node *deleteAtPos(struct Node *p, int pos)
+{
+
+    if (pos > count(p))
+    {
         printf("Not a valid position.\n");
         return p;
     }
-    
-    struct Node *q;//to be one ahead of p
-    
-    if(pos==1){
+
+    struct Node *q; //to be one ahead of p
+
+    if (pos == 1)
+    {
         //iter p to end of circle
-        while(p->next != head){
+        while (p->next != head)
+        {
             p = p->next;
-            
         }
         //if there's only one node, free it
-        if(p == head){
+        if (p == head)
+        {
             free(head);
             head = NULL;
         }
-        else{
+        else
+        {
             p->next = head->next; //end node pts to node after head
-            free(head); //del head
-            head = p->next; //head jumps one node forward
+            free(head);           //del head
+            head = p->next;       //head jumps one node forward
         }
     }
-    else{ //pos not the first node
+    else
+    { //pos not the first node
         p = head;
-        for(int i = 0; i < pos-2; i++ ){
+        for (int i = 0; i < pos - 2; i++)
+        {
             p = p->next;
         }
-        q = p->next; 
-        p->next = q->next; 
+        q = p->next;
+        p->next = q->next;
         free(q);
     }
-    printf("Node at pos %d deleted.\n",pos);
+    printf("Node at pos %d deleted.\n", pos);
     return head;
 }
 
